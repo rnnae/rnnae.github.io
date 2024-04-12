@@ -18,7 +18,7 @@
         font-family: helvetica;
     }
     .back {
-        margin: 1vw;
+        margin: 5px;
         position: fixed;
         left: 0px;
         top: 0px;
@@ -26,11 +26,16 @@
     .centered-text {
         text-align: center;
     }
+    .responsive {
+   @media only screen and (max-width: 844px) {
+   width:80%;
+        }
+    }
 </style>
 
 <div class="back"><a href="dpa.htm"><img width="20" src="back.png" alt="Back"></a></div>
 
-<img width=60% src="mulherolho.jpg" alt="Mulher Olho">
+<img width=60% src="mulherolho.jpg" alt="Mulher Olho" class="responsive">
 
 </body>
 </html>
