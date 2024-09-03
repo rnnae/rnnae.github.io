@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Calculadora de Período entre Datas</title>
+<style>
+        /* CSS básico para estilo */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            background-color: black; 
+            color: white; 
+        }
+ 
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+ 
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+ 
+        input {
+            font-family: Arial, sans-serif;
+            margin-bottom: 10px;
+            background-color: white;
+            color: black;
+        }
+ 
+        button {
+            background-color: white;
+            color: black;
+            border: 1px solid black;
+            padding: 5px 10px;
+        }
+ 
+        #resultado {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Calculadora de</h1>
+<h1 style="margin-top: -20px;">Período entre Datas</h1>
+<label for="data1">Data Inicial:</label>
+<input type="date" id="data1">
+<label for="data2">Data Final:</label>
+<input type="date" id="data2">
+<button onclick="calcularPeriodo()" style="margin-top: 10px;">Calcular Período</button>
+<div id="resultado"></div>
+</div>
+ 
+    <script>
+        function calcularPeriodo() {
+            // Pega os valores das datas dos inputs
+            const dataInicial = new Date(document.getElementById('data1').value);
+            const dataFinal = new Date(document.getElementById('data2').value);
+            // Calcula a diferença em milissegundos
+            const diferencaTempo = dataFinal - dataInicial;
+            // Converte a diferença de milissegundos para dias
+            const diferencaDias = (diferencaTempo + 86400000)/ (1000 * 60 * 60 * 24);
+            // Define a mensagem baseada na diferença de dias
+            let mensagem;
+            if (diferencaDias < 31) {
+                mensagem = 'temporário';
+            } else if (diferencaDias > 90) {
+                mensagem = 'permanente';
+            } else {
+                mensagem = 'determinado';
+            }
+ 
+            // Exibe o resultado
+            document.getElementById('resultado').innerText = `O período entre as datas é de ${diferencaDias} dias, \nportanto, o acesso é ${mensagem}.`;
+        }
+</script>
+</body>
+</html>
