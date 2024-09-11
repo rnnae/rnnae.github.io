@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Acesso - Service Desk</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+        .form-section {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select, textarea {
+            width: 90%; /* Adiciona margem lateral */
+            padding: 8px;
+            margin: 5px auto;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #222222;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #000000;
+        }
+        .radio-group {
+            margin: 5px 0;
+        }
+        .radio-option {
+            margin-bottom: 10px;
+        }
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1001; /* Tornar o popup acima do overlay */
+        }
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000; /* Overlay abaixo do popup */
+        }
+        .calendar-button {
+            padding: 8px;
+            margin-left: 10px;
+            background-color: #222222;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .calendar-button:hover {
+            background-color: #000000;
+        }
+        .form-container {
+            margin-left: 10%; /* Margem nas laterais */
+            margin-right: 10%;
+        }
+        #calendarPopup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+        }
+        #calendarPopup input {
+            display: block;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Formulário de Acesso</h2>
+
+<div class="form-container">
+    <div class="form-section">
+        <label for="empresa">Nome da Empresa:</label>
+        <input type="text" id="empresa" name="empresa">
+
+        <label for="contato">Nome de Contato:</label>
+        <input type="text" id="contato" name="contato">
+
+        <label for="tipoAcesso">Tipo de Acesso:</label>
+        <select id="tipoAcesso" name="tipoAcesso">
+            <option value="Temporário">Temporário</option>
+            <option value="Determinado">Determinado</option>
+            <option value="Permanente">Permanente</option>
+        </select>
+
+        <label for="dataEntradaManual">Data de Entrada:</label>
+        <input type="text" id="dataEntradaManual" name="dataEntradaManual" placeholder="dd/mm/aaaa hh:mm:ss">
+        <button class="calendar-button" onclick="abrirPopupCalendario('dataEntradaManual')">📅</button>
+
+        <label for="dataSaidaManual">Data de Saída:</label>
+        <input type="text" id="dataSaidaManual" name="dataSaidaManual" placeholder="dd/mm/aaaa hh:mm:ss">
+        <button class="calendar-button" onclick="abrirPopupCalendario('dataSaidaManual')">📅</button>
+
+        <label>Acesso às Docas:</label>
+        <div class="radio-group">
+            <div class="radio-option">
+                Não &nbsp;&nbsp;<input type="radio" id="docasNao" name="docas" value="Não">
+            </div>
+            <div class="radio-option">
+                Sim &nbsp;&nbsp;<input type="radio" id="docasSim" name="docas" value="Sim">
+            </div>
+        </div>
+
+        <label>Acesso ao Estacionamento:</label>
+        <div class="radio-group">
+            <div class="radio-option">
+                Não &nbsp;&nbsp;<input type="radio" id="estacionamentoNao" name="estacionamento" value="Não">
+            </div>
+            <div class="radio-option">
+                Sim &nbsp;&nbsp;<input type="radio" id="estacionamentoSim" name="estacionamento" value="Sim">
+            </div>
+        </div>
+
+        <label for="atividade">Atividade:</label>
+        <select id="atividade" name="atividade">
+            <option value="Nenhum">Nenhum</option>
+            <option value="Instalação de equipamento">Instalação de equipamento</option>
+            <option value="Manutenção">Manutenção</option>
+            <option value="Mudança">Mudança</option>
+            <option value="Service Provider">Service Provider</option>
+            <option value="Retirada de equipamento">Retirada de equipamento</option>
+            <option value="Vistoria">Vistoria</option>
+            <option value="Outros">Outros</option>
+        </select>
+
+        <label for="local">Local:</label>
+        <select id="local" name="local">
+            <option value="BSB1">BSB1</option>
+            <option value="BSB2">BSB2</option>
+            <option value="CTA1">CTA1</option>
+            <option value="POA1">POA1</option>
+            <option value="POA2">POA2</option>
+            <option value="RJO1">RJO1</option>
+            <option value="SPO1">SPO1</option>
+            <option value="SPO2">SPO2</option>
+            <option value="SPO3">SPO3</option>
+        </select>
+
+        <button onclick="abrirPopup()">Informe os Dados</button>
+
+        <div class="form-section">
+            <label for="sumario">Sumário:</label>
+            <input type="text" id="sumario" name="sumario">
+
+            <label for="descricao">Descrição:</label>
+            <textarea id="descricao" name="descricao" rows="5"></textarea>
+
+            <button onclick="enviarForm()">Enviar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Popup de Dados -->
+<div id="popup" class="popup">
+    <h3>Informe os Dados</h3>
+    <label for="nomePopup">Nome:</label>
+    <input type="text" id="nomePopup">
+
+    <label for="empresaPopup">Empresa:</label>
+    <input type="text" id="empresaPopup">
+
+    <label for="cpfPopup">CPF:</label>
+    <input type="text" id="cpfPopup">
+
+    <button onclick="fecharPopup()">Okay</button>
+</div>
+
+<!-- Popup de Calendário -->
+<div id="calendarPopup" class="popup">
+    <h3>Selecione a Data e Hora</h3>
+    <label for="dataCalendario">Data e Hora:</label>
+    <input type="datetime-local" id="dataCalendario" onchange="atualizarCampoCalendario()">
+    <button onclick="fecharPopupCalendario()">Okay</button>
+</div>
+
+<!-- Overlay -->
+<div class="popup-overlay" id="popupOverlay"></div>
+
+<script>
+    let dadosPopup = {};
+    let campoAtual = '';
+
+    function abrirPopup() {
+        document.getElementById('popup').style.display = 'block';
+        document.getElementById('popupOverlay').style.display = 'block';
+    }
+
+    function fecharPopup() {
+        dadosPopup = {
+            nome: document.getElementById('nomePopup').value,
+            empresa: document.getElementById('empresaPopup').value,
+            cpf: document.getElementById('cpfPopup').value
+        };
+        document.getElementById('popup').style.display = 'none';
+        document.getElementById('popupOverlay').style.display = 'none';
+    }
+
+    function abrirPopupCalendario(campoId) {
+        campoAtual = campoId;
+        document.getElementById('calendarPopup').style.display = 'block';
+        document.getElementById('popupOverlay').style.display = 'block';
+    }
+
+    function fecharPopupCalendario() {
+        document.getElementById('calendarPopup').style.display = 'none';
+        document.getElementById('popupOverlay').style.display = 'none';
+    }
+
+    function atualizarCampoCalendario() {
+        const valor = document.getElementById('dataCalendario').value;
+        const [date, time] = valor.split('T');
+        const dataFormatada = formatarData(date, time);
+        document.getElementById(campoAtual).value = dataFormatada;
+        fecharPopupCalendario();
+    }
+
+    function formatarData(date, time) {
+        const [ano, mes, dia] = date.split('-');
+        const [hora, minuto] = time.split(':');
+        return `${dia}/${mes}/${ano} ${hora}:${minuto}:00`;
+    }
+
+    function enviarForm() {
+        const empresa = document.getElementById('empresa').value;
+        const contato = document.getElementById('contato').value;
+        const tipoAcesso = document.getElementById('tipoAcesso').value;
+        const dataEntradaManual = document.getElementById('dataEntradaManual').value;
+        const dataSaidaManual = document.getElementById('dataSaidaManual').value;
+        const docas = document.querySelector('input[name="docas"]:checked').value;
+        const estacionamento = document.querySelector('input[name="estacionamento"]:checked').value;
+        const atividade = document.getElementById('atividade').value;
+        const local = document.getElementById('local').value;
+        const sumario = document.getElementById('sumario').value;
+        const descricao = document.getElementById('descricao').value;
+
+        const novaPagina = window.open('', '_blank');
+        novaPagina.document.write('<h2>Dados Enviados</h2>');
+        novaPagina.document.write(`<p><strong>Empresa:</strong> ${empresa}</p>`);
+        novaPagina.document.write(`<p><strong>Contato:</strong> ${contato}</p>`);
+        novaPagina.document.write(`<p><strong>Tipo de Acesso:</strong> ${tipoAcesso}</p>`);
+        novaPagina.document.write(`<p><strong>Data de Entrada:</strong> ${dataEntradaManual}</p>`);
+        novaPagina.document.write(`<p><strong>Data de Saída:</strong> ${dataSaidaManual}</p>`);
+        novaPagina.document.write(`<p><strong>Acesso às Docas:</strong> ${docas}</p>`);
+        novaPagina.document.write(`<p><strong>Acesso ao Estacionamento:</strong> ${estacionamento}</p>`);
+        novaPagina.document.write(`<p><strong>Atividade:</strong> ${atividade}</p>`);
+        novaPagina.document.write(`<p><strong>Local:</strong> ${local}</p>`);
+        novaPagina.document.write(`<p><strong>Nome:</strong> ${dadosPopup.nome || ''}</p>`);
+        novaPagina.document.write(`<p><strong>Empresa (Popup):</strong> ${dadosPopup.empresa || ''}</p>`);
+        novaPagina.document.write(`<p><strong>CPF:</strong> ${dadosPopup.cpf || ''}</p>`);
+        novaPagina.document.write(`<p><strong>Sumário:</strong> ${sumario}</p>`);
+        novaPagina.document.write('<p><strong>Descrição:</strong></p>');
+        novaPagina.document.write(`<pre>${descricao}</pre>`);
+        novaPagina.document.close();
+    }
+</script>
+
+</body>
+</html>
